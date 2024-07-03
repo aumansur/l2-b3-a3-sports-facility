@@ -1,4 +1,4 @@
-# Sports Facility Booking Gateway
+# Sports Facility Booking Platform
 
 ## Introduction
 
