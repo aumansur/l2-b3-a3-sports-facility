@@ -54,7 +54,9 @@ const findAvailableBookingTimeIntoDB = async (date: Date) => {
 };
 // get all data
 const getAllBookings = async () => {
-  const allBookings = await Booking.find({});
+  const allBookings = await Booking.find({})
+    .populate("facility")
+    .populate("user");
   return allBookings;
 };
 
