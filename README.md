@@ -1,8 +1,9 @@
-# Sports Facility Booking Platform
+# Sports Facility Booking Gateway
 
 ## Introduction
 
-Welcome to the Sports Facility Booking Platform project! This platform aims to provide a simple and efficient way for users to book sports facilities hassle-free. Developed using TypeScript, Express.js, and MongoDB with Mongoose, this project offers CRUD operations for users, facilities, and bookings, along with robust authentication and error handling functionalities.
+
+Welcome to the Sports Facility Booking Platform project! This innovative platform is designed to streamline the process of reserving sports facilities, providing users with a seamless booking experience. Built with modern web technologies such as TypeScript, Express.js, and MongoDB, this project embodies the principles of clean code, scalability, and robust security. Let's explore the unique aspects and technical excellence of this project from a different perspective.
 
 ## Technology Stack
 
@@ -44,8 +45,8 @@ Create a .env file in the root directory with the following variables:
 dotenv
  code
 #### PORT=5000  ( Example port, change as needed)
-#### MONGODB_URI=<your_mongodb_uri>
-#### JWT_SECRET=<your_jwt_secret>
+#### DB_URL=<your_mongodb_uri>
+#### JWT_ACCESS_SECRET=<your_jwt_secret>
 ### Start the server
 
 
