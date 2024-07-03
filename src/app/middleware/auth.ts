@@ -9,9 +9,8 @@ const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req, res, next) => {
     const getToken = req.headers.authorization;
     console.log("getToken:", getToken);
+    const token = getToken?.split(" ")[1];
 
-    // const token = getToken?.split("")[1];
-    const token = getToken;
     console.log("Token:", token);
 
     if (!token) {
