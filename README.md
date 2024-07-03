@@ -31,7 +31,7 @@ To set up and run this project locally, follow these steps:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Nazmul-Hasan-Shadin/Sports-Facility-Booking-Platform.git
+   git clone https://github.com/aumansur/l2-b3-a3-sports-facility.git
    cd <project_directory>
 ## Install dependencies
 
@@ -43,14 +43,14 @@ Create a .env file in the root directory with the following variables:
 
 dotenv
  code
-#### PORT=3000  ( Example port, change as needed)
+#### PORT=5000  ( Example port, change as needed)
 #### MONGODB_URI=<your_mongodb_uri>
 #### JWT_SECRET=<your_jwt_secret>
 ### Start the server
 
 
 ### npm start
-The server will start at http://localhost:3000 (or your specified port).
+The server will start at http://localhost:5000 (or your specified port).
 
 ## API Documentation
 ### User Routes
@@ -101,4 +101,4 @@ Cancel a Booking (User Only)
 DELETE /api/bookings/:id
 Cancel a booking identified by its ID.
 
-## Live Link : [Facility Booking Platform](https://facility-booking-platform.vercel.app/)
+## Live Link : [ sports Facility Booking ](https://sports-facility-two.vercel.app/)
