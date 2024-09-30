@@ -2,7 +2,6 @@ import { Schema, model } from "mongoose";
 import { TUser, UserModel } from "./user.interface";
 import bcrypt from "bcrypt";
 import config from "../../config";
-
 export const userSchema = new Schema<TUser, UserModel>(
   {
     name: {
@@ -20,6 +19,7 @@ export const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
+      default: "user",
     },
     phone: {
       type: String,
@@ -31,7 +31,6 @@ export const userSchema = new Schema<TUser, UserModel>(
     },
     isDeleted: {
       type: Boolean,
-      default: false,
     },
     passwordChangedAt: {
       type: Date,
@@ -42,16 +41,11 @@ export const userSchema = new Schema<TUser, UserModel>(
   }
 );
 
-// userSchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_round));
-//   next();
-// });
-
 userSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(
-    this.password,
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
     Number(config.bcrypt_salt_round)
   );
   next();
@@ -75,7 +69,7 @@ userSchema.statics.isUserExistWithCustomId = async function (email: string) {
   return await User.findOne({ email }).select("+password");
 };
 
-userSchema.statics.isJwtIssuedBeforeFunctionPasswordChanged = async function (
+userSchema.statics.isJwtIssuedBefofunctionrePasswordChanged = async function (
   passwordChangeTime: Date,
   jwtIssuedTime: number
 ) {

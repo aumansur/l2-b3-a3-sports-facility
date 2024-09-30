@@ -3,13 +3,13 @@ import { AuthController } from "./auth.controller";
 
 import { AuthValidation } from "./auth.validation";
 import validateRequest from "../../middleware/validetRequest";
-import { UserValidations } from "../user/user.validation";
+import { UserValidation } from "../user/user.validation";
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  validateRequest(UserValidations.userValidationSchema),
+  validateRequest(UserValidation.userValidationSchema),
   AuthController.signUpUser
 );
 router.post(

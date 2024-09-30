@@ -2,8 +2,9 @@ import config from "../config";
 import { AppError } from "../errors/AppError";
 import catchAsync from "../utils/catchAsync";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../modules/user/user.model";
+
 import sendResponse from "../utils/sendResponse";
+import { User } from "../modules/user/user.model";
 
 const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req, res, next) => {
@@ -41,7 +42,7 @@ const auth = (...requiredRoles: string[]) => {
 
     if (
       user.passwordChangedAt &&
-      (await User.isJwtIssuedBeforeFunctionPasswordChanged(
+      (await User.isJwtIssuedBefofunctionrePasswordChanged(
         user.passwordChangedAt,
         iat as number
       ))

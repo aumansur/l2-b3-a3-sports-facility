@@ -14,7 +14,7 @@ export interface TUser extends Document {
   phone: string;
   role: "admin" | "user";
   passwordChangedAt?: Date;
-  isDeleted: boolean;
+  isDeleted: Boolean;
   address: string;
 }
 
@@ -24,7 +24,7 @@ export interface UserModel extends Model<TUser> {
     plainPassword: string,
     hashedPassword: string
   ): Promise<boolean>;
-  isJwtIssuedBeforeFunctionPasswordChanged(
+  isJwtIssuedBefofunctionrePasswordChanged(
     passwordChangeTime: Date,
     jwtIssuedTime: number
   ): Promise<boolean>;

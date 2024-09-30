@@ -15,6 +15,9 @@ const facilitySchema = new Schema<TFacility, facilityData>({
     type: Number,
     required: true,
   },
+  image: {
+    type: String,
+  },
   location: {
     type: String,
     required: true,
@@ -25,11 +28,24 @@ const facilitySchema = new Schema<TFacility, facilityData>({
   },
 });
 
-facilitySchema.statics.isFacilityExist = async function (id) {
-  console.log(id, "lol");
+// facilitySchema.statics.isFacilityExist = async function (id) {
+//   console.log(id, "lol");
 
+//   return await Facility.findById({ _id: id });
+// };
+
+// export const Facility = model<TFacility, facilityData>(
+//   "Facility",
+//   facilitySchema
+// );
+
+facilitySchema.statics.isFacilityExist = async function (id: string) {
   return await Facility.findById({ _id: id });
 };
+
+facilitySchema.pre("find", function () {
+  this.find({ isDeleted: { $ne: true } });
+});
 
 export const Facility = model<TFacility, facilityData>(
   "Facility",

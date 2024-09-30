@@ -6,11 +6,11 @@ const userValidationSchema = z.object({
     email: z.string(),
     password: z.string(),
     phone: z.string(),
-    role: z.enum(["admin", "user"]),
+    role: z.enum(["admin", "user"]).optional(),
     address: z.string(),
   }),
 });
 
-export const UserValidations = {
+export const UserValidation = {
   userValidationSchema,
 };
