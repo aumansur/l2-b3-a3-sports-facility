@@ -1,14 +1,8 @@
+import express from "express";
+import { PaymentController } from "./payment.controller";
 
-import express from 'express'
-import { PaymentServices } from './payment.services'
-import { PaymentController } from './payment.controller'
+const router = express.Router();
 
-const router=express.Router()
+router.post("/create-payment-intent", PaymentController.paymentIntend);
 
-
-
- router.post('/create-payment-intent',PaymentController.paymentIntend)
-
-
-
-export const PaymentRoutes=router
+export const PaymentRoutes = router;

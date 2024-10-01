@@ -23,52 +23,53 @@ const deleteFacilityFromDB = async (id: string) => {
 };
 
 const getFacilityFromDB = async (query: Record<string, any>) => {
-  // Exclude fields from query that shouldn't be used in filtering
   const excludes = ["searchTerm", "sort", "limit", "page", "fields"];
   let searchTerms = "";
 
-  // Create a query object excluding unnecessary fields like searchTerm, sort, etc.
+  // Clone the query object and filter out the exclude fields
   const queryObj: Record<string, unknown> = { ...query, isDeleted: false };
   excludes.forEach((el) => delete queryObj[el]);
 
-  // If there's a searchTerm in the query, assign it
+  // Handle search term if provided
   if (query?.searchTerm) {
     searchTerms = query.searchTerm;
   }
 
-  // Create a search query using $regex for case-insensitive partial matches
-  const searchQuery = Facility.find({
+  // Build the search query for multiple fields
+  const searchQuery = {
     $or: ["name", "description", "location"].map((field) => ({
-      [field]: { $regex: searchTerms, $options: "i" },
+      [field]: { $regex: searchTerms, $options: "i" }, // Case-insensitive partial search
     })),
-  });
+  };
 
-  // Apply any additional filters from the queryObj
-  const filterQuery = searchQuery.find(queryObj);
+  // Apply filters from query object (excluding unnecessary ones)
+  const filterQuery = Facility.find({ ...searchQuery, ...queryObj });
 
-  // Sorting
-  let sort = "createdAt"; // Default sort by createdAt
+  // Sorting logic
+  let sort = "createdAt"; // Default sorting by createdAt
   if (query?.sort) {
     sort = query.sort as string;
   }
-  const sortQuery = filterQuery.sort(sort);
+  const sortedQuery = filterQuery.sort(sort);
 
-  // Pagination: limit and page
-  let limit = 5;
-  let page = 1;
+  // Pagination logic
+  let limit = 5; // Default limit
+  let page = 1; // Default page
   let skip = 0;
+
   if (query?.limit) {
     limit = Number(query.limit);
   }
+
   if (query?.page) {
     page = Number(query.page);
     skip = (page - 1) * limit;
   }
 
-  // Paginate and return the result
-  const skipQuery = await sortQuery.limit(limit).skip(skip);
+  // Execute the final query with pagination
+  const facilities = await sortedQuery.limit(limit).skip(skip);
 
-  return skipQuery;
+  return facilities;
 };
 
 // Get single facility by ID

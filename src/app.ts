@@ -13,13 +13,20 @@ app.use(express.json());
 app.use(
   cors({
     // origin: "https://sportyra.vercel.app",
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://sportyra.vercel.app"],
     // local host origin
     // origin: "http://localhost:3000",
 
     credentials: true,
   })
 );
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' https://js.stripe.com https://m.stripe.network 'unsafe-inline' 'unsafe-eval' blob:; connect-src 'self' https://api.stripe.com https://m.stripe.network; frame-src 'self' https://js.stripe.com https://m.stripe.network; img-src 'self' data: https://q.stripe.com; style-src 'self' 'unsafe-inline';"
+  );
+  next();
+});
 
 app.use("/api/", router);
 
