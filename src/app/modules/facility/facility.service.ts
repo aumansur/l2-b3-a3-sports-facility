@@ -36,40 +36,51 @@ const getFacilityFromDB = async (query: Record<string, any>) => {
   }
 
   // Build the search query for multiple fields
-  const searchQuery = {
-    $or: ["name", "description", "location"].map((field) => ({
-      [field]: { $regex: searchTerms, $options: "i" }, // Case-insensitive partial search
-    })),
-  };
-
-  // Apply filters from query object (excluding unnecessary ones)
-  const filterQuery = Facility.find({ ...searchQuery, ...queryObj });
+  let filterQuery;
+  if (searchTerms) {
+    const searchQuery = {
+      $or: ["name", "description", "location"].map((field) => ({
+        [field]: { $regex: searchTerms, $options: "i" }, // Case-insensitive partial search
+      })),
+    };
+    filterQuery = Facility.find({ ...searchQuery, ...queryObj });
+  } else {
+    filterQuery = Facility.find({ ...queryObj });
+  }
 
   // Sorting logic
-  let sort = "createdAt"; // Default sorting by createdAt
+  let sortOption: { [key: string]: 1 | -1 } = { createdAt: -1 }; // Default to newest first
   if (query?.sort) {
-    sort = query.sort as string;
+    const sortField = query.sort.startsWith("-")
+      ? query.sort.slice(1)
+      : query.sort;
+    const sortOrder = query.sort.startsWith("-") ? -1 : 1;
+
+    if (["pricePerHour", "createdAt"].includes(sortField)) {
+      sortOption = { [sortField]: sortOrder };
+    } else {
+      console.error(`Unsupported sorting field: ${sortField}`);
+    }
   }
-  const sortedQuery = filterQuery.sort(sort);
+  filterQuery = filterQuery.sort(sortOption);
 
   // Pagination logic
-  let limit = 5; // Default limit
-  let page = 1; // Default page
-  let skip = 0;
+  const limit = Math.max(Number(query?.limit) || 5, 1); // Default limit
+  const page = Math.max(Number(query?.page) || 1, 1); // Default page
+  const skip = (page - 1) * limit;
 
-  if (query?.limit) {
-    limit = Number(query.limit);
-  }
+  // Execute the query with pagination
+  const facilities = await filterQuery.limit(limit).skip(skip);
 
-  if (query?.page) {
-    page = Number(query.page);
-    skip = (page - 1) * limit;
-  }
+  // Count total documents
+  const total = await Facility.countDocuments({ ...queryObj });
 
-  // Execute the final query with pagination
-  const facilities = await sortedQuery.limit(limit).skip(skip);
-
-  return facilities;
+  return {
+    data: facilities,
+    total, // Return the total number of results
+    limit, // Return the limit (items per page)
+    page, // Return the current page
+  };
 };
 
 // Get single facility by ID

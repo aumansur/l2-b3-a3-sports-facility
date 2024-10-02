@@ -46,7 +46,8 @@ const deleteFacility = catchAsync(async (req, res) => {
 // retrieve facility successfully
 
 const getFacilities = catchAsync(async (req, res) => {
-  const result = await FacilityServices.getFacilityFromDB(req.body);
+  // Use req.query to access the query parameters
+  const result = await FacilityServices.getFacilityFromDB(req.query);
   sendResponse(res, {
     statusCode: 200,
     success: true,
